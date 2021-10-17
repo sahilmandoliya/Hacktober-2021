@@ -1,0 +1,148 @@
+#include<iostream>
+using namespace std;
+
+class Node
+{
+public:
+    int Data;
+    Node* next;
+
+    Node(int Value)
+    {
+        Data=Value;
+        next=NULL;
+    }
+};
+
+///Here we are inserting at tail of the linked list.
+void InsertAtTail(Node* &head,int Id)
+{
+    Node* n= new Node(Id);
+
+    if(head==NULL)
+    {
+        head=n;
+    }
+    else
+    {
+        Node *temp=head;
+        while(temp->next!=NULL)
+        {
+              temp=temp->next;
+        }
+        temp->next=n;
+    }
+
+}
+///Here we are inserting at head of the linked list.
+void InsertAtHead(Node* &head,int Value)
+{
+    Node* n=new Node(Value);
+
+    n->next=head;
+    head = n;
+}
+
+///Here we are printing the data of the linked list.
+void Traverse(Node* head)
+{
+    Node* n =head;
+    while(n!=NULL)
+    {
+        cout<<n->Data <<" ->";
+        n=n->next;
+    }
+    cout<<"NULL"<<endl;
+}
+
+int Length(Node* &head)
+{
+    int l=0;
+    Node* temp=head;
+
+    while(temp!=NULL)
+    {
+        temp=temp->next;
+        l++;
+    }
+    return l;
+}
+
+int Intersection(Node* &head1, Node* &head2)
+{
+    int l1=Length(head1);
+    int l2=Length(head2);
+
+    int d=0;
+    Node* ptr1;
+    Node* ptr2;
+    if(l1>l2)
+    {
+        d=l1-l2;
+        ptr1=head1;
+        ptr2=head2;
+    }
+    else
+    {
+        d=l2-l1;
+        ptr1=head2;
+        ptr2=head1;
+    }
+
+    while(d)  
+    {
+        ptr1=ptr1->next;
+        if(ptr1==NULL)  
+        {
+            return -1;
+        }
+        d--;
+    }
+
+    while(ptr1!=NULL && ptr2!=NULL)
+    {
+        if(ptr1==ptr2) 
+        {
+            return ptr1->Data;
+        }
+        ptr1=ptr1->next;
+        ptr2=ptr2->next;
+    }
+    return -1;
+}
+
+void Intersect(Node* &head1, Node* &head2,int pos)
+{
+   
+    Node* temp1=head1;
+    pos--;
+    while(pos--)
+    {
+        temp1=temp1->next;
+    }
+    Node* temp2=head2;
+    while(temp2->next!=NULL)
+    {
+        temp2=temp2->next;
+    }
+    temp2->next=temp1;
+}
+
+int main()
+{
+   Node* head1=NULL;
+   int arr[]={1,2,3,4,5,6};
+   for(int i=0;i<6;i++)
+   {
+       InsertAtTail(head1,arr[i]);
+   }
+    Node *head2=NULL;
+    InsertAtTail(head2,9);
+    InsertAtTail(head2,10);
+    InsertAtTail(head2,6);
+
+    Intersect(head1,head2,3);
+    Traverse(head1);
+    Traverse(head2);
+     cout<<Intersection(head1,head2);
+}
